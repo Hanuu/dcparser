@@ -4,7 +4,10 @@ import requests
 
 def get_html():
     url="http://gall.dcinside.com/board/lists"
+
+    # 페이지 이름
     payload = {"id": "bitcoins","page":"1"}
+    # 디씨인사이드는 현재 파이썬을 이용한 파싱을 막고있다.
     headers={
         "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "User-Agent":"Mozilla/5.0 (Mactinosh; Intel Mac OS X 10.12; rv:57.0) Gecko/20100101 Firefox/57.0"
