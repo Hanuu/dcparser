@@ -65,7 +65,7 @@ def getpage(pagenumber):
 todaydate=str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
 totalpage=100
 
-with open(todaydate+"_"+str(totalpage)+"p_.csv","w",newline="",encoding='utf8') as csvfile:
+with open(todaydate+"_"+str(totalpage)+"p.csv","w",newline="",encoding='utf8') as csvfile:
     spamwriter=csv.writer(csvfile,delimiter=" ",quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for i in range(1,totalpage+1):
         spamwriter.writerow(getpage(i),)
