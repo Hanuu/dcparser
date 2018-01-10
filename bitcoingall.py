@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-
+import datetime
 
 def get_html(pagenumber):
     url="http://gall.dcinside.com/board/lists/?id=bitcoins&page="+str(pagenumber)
@@ -62,7 +62,10 @@ def getpage(pagenumber):
     return dc_num,dc_title,dc_time
 
 # print(getpage(1))
-with open("20180110_1706_10000p","w",newline="",encoding='utf8') as csvfile:
+todaydate=str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+totalpage=100
+
+with open(todaydate+"_"+str(totalpage)+"p_.csv","w",newline="",encoding='utf8') as csvfile:
     spamwriter=csv.writer(csvfile,delimiter=" ",quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    for i in range(1,10000):
+    for i in range(1,totalpage+1):
         spamwriter.writerow(getpage(i),)
