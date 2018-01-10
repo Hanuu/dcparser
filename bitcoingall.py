@@ -37,9 +37,22 @@ def getpage(pagenumber):
     soup = BeautifulSoup(str(tr_data),"lxml")
     articletime = soup.find_all("td",class_="t_date")
 
+    soup=BeautifulSoup(str(tr_data),"lxml")
+    viewAndHit=soup.find_all("td",class_="t_hits")
+
+    hits=[]
+    views=[]
+    for i in range(len(viewAndHit)):
+        if i%2==0:
+            views.append(viewAndHit[i].get_text())
+        else:
+            hits.append(viewAndHit[i].get_text())
+
     dc_num=[]
     dc_title=[]
     dc_time=[]
+    dc_hits=[]
+    dc_views=[]
     for i in range(0,len(articlenumbers)):
         # dc_ip=articlewriters[i].get("ip")
         # dc_user=articlewriters[i].get("user_name")
@@ -50,22 +63,27 @@ def getpage(pagenumber):
             dc_title.append(articletitles[i].get_text())
             string=str(articletime[i])
             dc_time.append(string[26:45])
+            dc_hits.append(hits[i])
+            dc_views.append(views[i])
 
-
-        # print(dc_ip)
-        # print(dc_user)
-        # print(dc_num)
-        # print(dc_title)
-        # print(dc_time)
-        # print("---------------------")
-
-    return dc_num,dc_title,dc_time
+    # for i in range(len(dc_num)):
+    #     # print(dc_ip)
+    #     # print(dc_user)
+    #     print(dc_num[i])
+    #     # print(dc_title[i])
+    #     # print(dc_time[i])
+    #     print(dc_hits[i])
+    #     print(dc_views[i])
+    #     print("---------------------")
+    return dc_num,dc_title,dc_views,dc_hits,dc_time
 
 # print(getpage(1))
 todaydate=str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-totalpage=100
+totalpage=1000
 
 with open(todaydate+"_"+str(totalpage)+"p.csv","w",newline="",encoding='utf8') as csvfile:
     spamwriter=csv.writer(csvfile,delimiter=" ",quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for i in range(1,totalpage+1):
+        if i%100==0:
+            print(i)
         spamwriter.writerow(getpage(i),)
