@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import datetime
+import time
+import random
 
 def get_html(pagenumber):
     url="http://gall.dcinside.com/board/lists/?id=bitcoins&page="+str(pagenumber)
@@ -79,11 +81,21 @@ def getpage(pagenumber):
 
 # print(getpage(1))
 todaydate=str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-totalpage=1000
-
+totalpage=100
+startpage=0
+page=startpage
 with open(todaydate+"_"+str(totalpage)+"p.csv","w",newline="",encoding='utf8') as csvfile:
     spamwriter=csv.writer(csvfile,delimiter=" ",quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    for i in range(1,totalpage+1):
-        if i%100==0:
-            print(i)
-        spamwriter.writerow(getpage(i),)
+    while(page<totalpage):
+        page+=1
+        print(page)
+        if page%50==0:
+            print(page, datetime.datetime.now())
+        try:
+            spamwriter.writerow(getpage(page),)
+        except requests.exceptions.ConnectionError:
+            print("connection error at page",page,datetime.datetime.now())
+            page-=1
+            time.sleep(1)
+
+
