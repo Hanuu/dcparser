@@ -81,18 +81,28 @@ def getpage(pagenumber):
 
 # print(getpage(1))
 todaydate=str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-totalpage=30000
-startpage=22647
+totalpage=100000
+startpage=1
 page=startpage
-with open(todaydate+"_"+str(startpage)+"_"+str(totalpage)+"p.csv","w",newline="",encoding='utf8') as csvfile:
-    spamwriter=csv.writer(csvfile,delimiter=" ",quotechar='|', quoting=csv.QUOTE_MINIMAL)
+with open(todaydate+"_"+str(startpage)+"_"+str(startpage+totalpage)+"p.csv","w",newline="",encoding='utf8') as csvfile:
+    spamwriter=csv.writer(csvfile,delimiter=",", quoting=csv.QUOTE_MINIMAL)
     while(page<totalpage):
         page+=1
         print(page)
         if page%50==0:
             print(page, datetime.datetime.now())
         try:
-            spamwriter.writerow(getpage(page),)
+            dc_num,dc_title,dc_views,dc_hits,dc_time=getpage(page)
+            for i in range(len(dc_num)):
+                temp=[]
+                temp.append(dc_num[i])
+                temp.append(dc_title[i][:-1])
+                temp.append(dc_views[i])
+                temp.append(dc_hits[i])
+                temp.append(dc_time[i])
+                # [dc_num[i]] + [dc_title[i][:-1]] + [dc_views[i]] + [dc_hits[i]] + [dc_time[i]]
+                spamwriter.writerow(temp,)
+            # spamwriter.writerow(getpage(page),)
         except requests.exceptions.ConnectionError or requests.exceptions.ChunkedEncodingError:
             print("connection error at page",page,datetime.datetime.now())
             page-=1
